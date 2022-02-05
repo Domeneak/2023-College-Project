@@ -1,0 +1,3 @@
+{
+    "mongoURI": "mongodb+srv://domoaddi:<password>@cluster0.q8udf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+}
