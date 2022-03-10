@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://domoaddi:domo1234@cluster0.q8udf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://domoaddi:domo1234@cluster0.q8udf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "jwtSecret": "soniclikesrings"
 }
