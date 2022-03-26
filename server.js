@@ -17,7 +17,7 @@ connectDatabase();
 app.use(express.json({ extended: false}));
 app.use(
     cors({
-        origin: 'http://localhost:3000'
+        origin: 'http://localhost:5000'
     })
 );
 
@@ -71,6 +71,10 @@ app.post(
 
             // Save to the db and return
             await user.save();
+            
+        
+    
+
 
             // Generate and return a JWT token
             const payload = {
@@ -88,13 +92,12 @@ app.post(
                     res.json({ token: token});
                 }
             );
-            res.send('User successfully registered');
-        } catch (error) {
-            res.status(500).send('Server error');
+            } catch (error) {
+                res.status(500).send('Server error');
+            }
         }
     }
-   }
-);
+); 
 
 //Connection listener
 const port = 5000;
