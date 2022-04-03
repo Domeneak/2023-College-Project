@@ -6,6 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import User from './models/User';
+import auth from './middleware/auth';
 
 // Initialize express application
 const app = express();
@@ -26,9 +27,14 @@ app.use(
  * @route GET /
  * @desc Test endpoint
  */
-app.get('/', (req, res) =>
-    res.send('http get request sent to root api endpoint')
-);
+app.get('/api/auth', auth, async (req, res) => {
+    try {
+        const user =await User.findById(req.user.id);
+        res.status(200).json(user);
+    } catch (error) {
+      res.status(500).send('Unknown server error');  
+    }
+});
 
 /**
  * @route POST api/users
@@ -37,12 +43,15 @@ app.get('/', (req, res) =>
 app.post(
     '/api/users',
     [
-    check('name', 'Please enter your name').not().isEmpty(),
+    check('name', 'Please enter your name')
+    .not().
+    isEmpty(),
         check('email', 'Please enter a valid email').isEmail(),
-        check('password', 'Please enter a password with 6 or more characters'
+        check(
+            'password', 
+            'Please enter a password with 6 or more characters'
         ).isLength({ min: 6})
     ],
-    
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()){
@@ -71,17 +80,12 @@ app.post(
 
             // Save to the db and return
             await user.save();
-            
-        
-    
-
 
             // Generate and return a JWT token
-            const payload = {
-                user: {
-                    id: user.id
-                }
-            };
+            returnToken(user, res);
+        } catch (error) {
+            res.status(500).send('Server error');
+        }
 
             jwt.sign(
                 payload,
@@ -92,11 +96,9 @@ app.post(
                     res.json({ token: token});
                 }
             );
-            } catch (error) {
-                res.status(500).send('Server error');
+            
             }
         }
-    }
 ); 
 
 //Connection listener
