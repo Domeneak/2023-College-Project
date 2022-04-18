@@ -42,7 +42,7 @@ const Login = ({ authenticateUser }) => {
             history.push('/')
         } catch (error) {
             // Clear user data
-            localStorage.removeItem('token';
+            localStorage.removeItem('token');
             
             setErrorData({
                 ...errors,
