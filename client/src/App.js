@@ -21,8 +21,18 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.authenticateUser();
-    }
+        axios.get('http://localhost:5000')
+      .then((response) => {
+        this.setState({
+          data: response.data
+        })
+      })
+      .catch((error) => {
+        console.error(`Error fetching data: ${error}`);
+      })
+      
+      this.authenticateUser();
+  }
 
     authenticateUser = () => {
         const token = localStorage.getItem('token');
@@ -109,7 +119,7 @@ class App extends React.Component {
                     console.error(`Error deleting post: ${error}`);
                 });
         }
-    }
+    };
 
     editPost = post => {
         this.setState({
@@ -180,11 +190,14 @@ class App extends React.Component {
                                 {user ? (
                                 <React.Fragment>
                                     <div>Hello {user}!</div>
-                                    <PostList 
-                                        posts={posts} 
-                                        clickPost={this.viewPost}
-                                        deletePost={this.deletePost} 
-                                        editPost={this.editPost} />
+                                    <div>
+                                        {posts.map(post => (
+                                            <div key={post._id}>
+                                                <h1>{post.title}</h1>
+                                                <p>{post.body}</p>
+                                            </div> 
+                                        ))}
+                                       </div> 
                                 </React.Fragment>
                                 ) : (
                                 <React.Fragment>Please Register or Login</React.Fragment>    
